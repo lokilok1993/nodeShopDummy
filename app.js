@@ -11,6 +11,7 @@ const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user');
 
+// Настройка mongoose
 mongoose.connect('mongodb://127.0.0.1:27017/node-shop', {useMongoClient: true});
 mongoose.Promise = global.Promise
 

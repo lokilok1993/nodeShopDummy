@@ -169,12 +169,14 @@ router.delete('/:productId', checkAuth, (req, res, next) => {
 });
 
 // Обработка запроса PATCH по адресу /products с указанием id  ( Изменение продукта по id )
-router.patch('/:productId', checkAuth, (req, res, next) =>{
+router.patch('/:productId', checkAuth, upload.single('productimage'), (req, res, next) =>{
 	const id = req.params.productId;
-	const updateOps = {};
-	for(const ops of req.body){
-		updateOps[ops.propName] = ops.value
-	}
+	
+	const updateOps = {
+		name: req.body.name,
+		price: req.body.price,
+		productImage: req.file.path
+	};
 
 	Product.update({_id: id}, { $set: updateOps })
 	.exec()
