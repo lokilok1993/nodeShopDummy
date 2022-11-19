@@ -42,7 +42,7 @@ const Product = require('../models/product');
 
 
 // Обработка запроса POST по адресу /products ( Добовление продукта )
-router.post('/', checkAuth, upload.single('productimage') , (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage') , (req, res, next) => {
 	console.log(req.file);
 	// Создание сущности продукта с параметрами из тела запроса
 	const product = new Product({
@@ -169,33 +169,38 @@ router.delete('/:productId', checkAuth, (req, res, next) => {
 });
 
 // Обработка запроса PATCH по адресу /products с указанием id  ( Изменение продукта по id )
-router.patch('/:productId', checkAuth, upload.single('productimage'), (req, res, next) =>{
+router.patch('/:productId', checkAuth, upload.single('productImage'), (req, res, next) =>{
 	const id = req.params.productId;
-	
-	const updateOps = {
-		name: req.body.name,
-		price: req.body.price,
-		productImage: req.file.path
-	};
 
-	Product.update({_id: id}, { $set: updateOps })
-	.exec()
-	.then(result => {
-		console.log(result);
-		res.status(200).json({
-			message: 'Product updated!',
-			request: {
-				type: 'GET',
-				url: 'http://localhost:3000/products/'+ id
-			}
+	Product.findById(id).exec((error, updatedProduct)=>{
+		console.log(updatedProduct);
+		const updateOps = {
+			name: req.body.name,
+			price: req.body.price,
+			productImage: req.file ? req.file.path : updatedProduct.productImage
+		};
+
+		Product.update({_id: id}, { $set: updateOps })
+		.exec()
+		.then(result => {
+			console.log(result);
+			res.status(200).json({
+				message: 'Product updated!',
+				request: {
+					type: 'GET',
+					url: 'http://localhost:3000/products/'+ id
+				}
+			})
 		})
-	})
-	.catch(err => {
-		console.log(err);
-		res.status(500).json({
-			error: err
-		});
-	})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		})
+	});
+
+	
 })
 
 

@@ -34,7 +34,9 @@ app.use((req, res, next) => {
 });
 
 
-
+app.get('/', () => {
+	res.sendfile("/index.html");
+})
 // Обработка запросов к моим маршрутам
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);

@@ -12,6 +12,7 @@ const Product = require('../models/product.js');
 router.post('/', checkAuth, (req, res, next) => {
 	Product.findById(req.body.productId)
 	.then(product => {
+		console.log(req.body.productId);
 		if(!product){
 			return res.status(404).json({
 				message: 'Product not found'
@@ -25,7 +26,6 @@ router.post('/', checkAuth, (req, res, next) => {
 		return order.save()
 	})
 	.then(result => {
-			console.log(result);
 			res.status(201).json({
 				message: 'Order stored!',
 				createdOrder:{
