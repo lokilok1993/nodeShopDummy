@@ -17,10 +17,11 @@ mongoose.Promise = global.Promise
 
 // Логи подключений и парсинг тела запросов
 app.use(morgan('dev'));
-app.use('/uploads',express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+app.use('/uploads',express.static('uploads'));
+app.use(express.static('public'))
 
 // Заголовки для разрешения кросдоменных запросов
 app.use((req, res, next) => {
